@@ -1,0 +1,10 @@
+package com.xkingdark.kingsveinminer;
+
+import net.fabricmc.api.ModInitializer;
+
+public class Main implements ModInitializer {
+
+    @Override
+    public void onInitialize() {
+    }
+}
