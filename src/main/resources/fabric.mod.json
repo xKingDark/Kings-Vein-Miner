@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "id": "kings-vein-minecraft",
+  "id": "kings-vein-miner",
   "name": "King's Vein Miner",
   "description": "",
   "version": "${version}",
   "authors": [ "xKingDark" ],
   "contact": {},
   "license": "LGPL-3.0",
-  "icon": "assets/kings-vein-minecraft/icon.png",
-  "environment": "server",
+  "icon": "assets/xkingdark/vein-miner/icon.png",
+  "environment": "*",
   "entrypoints": {
     "main": [ "com.xkingdark.kingsveinminer.Main" ]
   },

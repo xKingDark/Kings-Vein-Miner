@@ -1,0 +1,19 @@
+{
+  "weight": 2,
+  "description": {
+    "translate": "enchantment.xkingdark.vein_miner"
+  },
+  "max_level": 1,
+  "slots": [ "mainhand" ],
+  "supported_items": "#minecraft:pickaxes",
+  "effects": {},
+  "anvil_cost": 7,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 51,
+    "per_level_above_first": 0
+  }
+}
