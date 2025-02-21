@@ -3,6 +3,7 @@ package com.xkingdark.kingsveinminer.items;
 import com.xkingdark.kingsveinminer.Main;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
@@ -59,7 +60,10 @@ public class Enchantments {
                 continue;
 
             visitedBlocks.add(blockPos);
-            world.breakBlock(blockPos, true, player);
+
+            block.afterBreak(world, player, blockPos, blockState, null, itemStack);
+            world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
+            block.onBreak(world, blockPos, blockState, player);
 
             applyVeinMiner(visitedBlocks, world, player, itemStack, mainState, blockPos);
         }

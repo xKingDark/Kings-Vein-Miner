@@ -11,8 +11,6 @@ public class Main implements ModInitializer {
     
     @Override
     public void onInitialize() {
-        LOGGER.info("Hello, world!");
-
         Registry.initialize();
     }
 }
