@@ -1,4 +1,7 @@
-/.gradle
-/.idea
-/build
-/run
+/.gradle/
+/build/
+/run/
+
+/.idea/*
+!/.idea/misc.xml
+!/.idea/icon.png
