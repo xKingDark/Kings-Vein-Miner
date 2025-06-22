@@ -1,6 +1,6 @@
 plugins {
-    id 'fabric-loom' version '1.10-SNAPSHOT'
-    id 'maven-publish'
+    id "fabric-loom" version "${loom_version}"
+    id "maven-publish"
 }
 
 version = "${project.mod_version}+mc${project.minecraft_version}"
@@ -62,6 +62,46 @@ java {
     // if it is present.
     // If you remove this line, sources will not be generated.
     withSourcesJar()
+}
+
+def generatedSrcDir = file("$buildDir/generated/buildinfo")
+tasks.register("generateBuildInfo") {
+    def commitHash = "unknown"
+    def gitBranch = "unknown"
+    def buildId = System.currentTimeMillis()
+    def outputFile = new File(generatedSrcDir, "com/xkingdark/kingsveinminer/BuildInfo.java")
+
+    try {
+        commitHash = "git rev-parse --short HEAD".execute().text.trim()
+    } catch (Exception ignored) {}
+    try {
+        gitBranch = "git branch --show-current".execute().text.trim()
+    } catch (Exception ignored) {}
+
+    outputs.file(outputFile)
+    doLast {
+        outputFile.parentFile.mkdirs()
+        outputFile.text = """
+            package com.xkingdark.kingsveinminer;
+            
+            public class BuildInfo {
+                public static final String VERSION = "${project.mod_version}";
+                public static final String BRANCH = "${gitBranch}";
+                public static final String COMMIT_HASH = "${commitHash}";
+                public static final String BUILD_ID = "${buildId}";
+            };
+        """.stripIndent()
+    }
+}
+
+sourceSets.main.java.srcDir(generatedSrcDir)
+tasks.named("compileJava") {
+    dependsOn("generateBuildInfo")
+}
+afterEvaluate {
+    tasks.named("sourcesJar") {
+        dependsOn("generateBuildInfo")
+    }
 }
 
 jar {
