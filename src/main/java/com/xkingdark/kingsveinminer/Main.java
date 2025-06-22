@@ -3,14 +3,15 @@ package com.xkingdark.kingsveinminer;
 import com.xkingdark.kingsveinminer.helpers.Registry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;
 import net.minecraft.resource.ResourcePack;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.security.MessageDigest;
+import java.util.Optional;
 import java.util.UUID;
 
 public class Main implements ModInitializer {
@@ -32,10 +33,10 @@ public class Main implements ModInitializer {
                 ResourcePackSendS2CPacket packet = new ResourcePackSendS2CPacket(
                     UUID.randomUUID(),
                     "https://raw.githubusercontent.com/DarkGamerYT/Kings-Vein-Miner/" + BuildInfo.COMMIT_HASH + "/src/main/resources/resourcepacks/kings-vein-miner.zip",
-                    packHash,
-                    true,
-                    null
+                    packHash, true,
+                    Optional.of(Text.of(""))
                 );
+
                 handler.player.networkHandler.sendPacket(packet);
             });
         };
@@ -45,9 +46,8 @@ public class Main implements ModInitializer {
 
     public static String computePackHash() {
         try (InputStream input = ResourcePack.class.getResourceAsStream("/resourcepacks/kings-vein-miner.zip")) {
-            if (input == null) {
+            if (input == null)
                 throw new IllegalStateException("Resource pack not found in JAR.");
-            }
 
             MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
             byte[] buffer = new byte[8192];
@@ -61,7 +61,8 @@ public class Main implements ModInitializer {
 
             return sb.toString();
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return null;
         }
     };
