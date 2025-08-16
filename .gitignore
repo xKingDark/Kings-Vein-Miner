@@ -1,7 +1,8 @@
-.gradle/
 build/
+bin/
 run/
 
+.gradle/
 .idea/*
 !.idea/codeStyles
 !.idea/icon.png
