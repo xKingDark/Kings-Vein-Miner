@@ -2,7 +2,9 @@ build/
 bin/
 run/
 
+**/.DS_Store
+
 .gradle/
-.idea/*
+.idea/**/*
 !.idea/codeStyles
 !.idea/icon.png
