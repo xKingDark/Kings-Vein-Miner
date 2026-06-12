@@ -1,23 +1,22 @@
 {
-  "schemaVersion": 1,
-  "id": "kings-vein-miner",
-  "name": "King's Vein Miner",
-  "description": "Adds enchantments that allow you to break an entire vein of blocks!",
-  "version": "${version}",
-  "authors": [ "xKingDark" ],
-  "contact": {
-    "sources": "https://github.com/DarkGamerYT/Kings-Vein-Miner",
-    "issues": "https://github.com/DarkGamerYT/Kings-Vein-Miner/issues"
-  },
-  "license": "LGPL-3.0",
-  "icon": "icon.png",
-  "environment": "*",
-  "entrypoints": {
-    "main": [ "com.xkingdark.kingsveinminer.Main" ]
-  },
-  "depends": {
-    "fabric": "*",
-    "fabricloader": ">=${loader_version}",
-    "minecraft": "${minecraft_version}"
-  }
+    "schemaVersion": 1,
+    "id": "kings-vein-miner",
+    "name": "King's Vein Miner",
+    "description": "Adds enchantments that allow you to break an entire vein of blocks!",
+    "version": "${version}",
+    "authors": [ "xKingDark" ],
+    "contact": {
+        "sources": "https://github.com/DarkGamerYT/Kings-Vein-Miner",
+        "issues": "https://github.com/DarkGamerYT/Kings-Vein-Miner/issues"
+    },
+    "license": "LGPL-3.0",
+    "icon": "icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [ "com.xkingdark.kingsveinminer.Main" ]
+    },
+    "depends": {
+        "fabricloader": ">=${loader_version}",
+        "minecraft": "${minecraft_version}"
+    }
 }

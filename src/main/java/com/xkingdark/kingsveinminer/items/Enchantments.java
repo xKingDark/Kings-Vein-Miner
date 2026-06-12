@@ -1,35 +1,36 @@
 package com.xkingdark.kingsveinminer.items;
 
 import com.xkingdark.kingsveinminer.Main;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Enchantments {
-    public static final RegistryKey<Enchantment> VEIN_MINER = keyOf("vein_miner");
-    public static final RegistryKey<Enchantment> TREE_CAPITATOR = keyOf("tree_capitator");
+    public static final ResourceKey<Enchantment> VEIN_MINER = keyOf("vein_miner");
+    public static final ResourceKey<Enchantment> TREE_CAPITATOR = keyOf("tree_capitator");
 
-    private static RegistryKey<Enchantment> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of(Main.MOD_ID, id));
+    private static ResourceKey<Enchantment> keyOf(String id) {
+        return ResourceKey.create(Registries.ENCHANTMENT, Identifier.fromNamespaceAndPath(Main.MOD_ID, id));
     }
 
     private static List<BlockPos> getVeinShape(BlockPos pos) {
         return List.of(
-            pos.up(), pos.down(),
+            pos.above(), pos.below(),
 
             pos.north(), pos.south(),
             pos.east(), pos.west()
@@ -38,8 +39,8 @@ public class Enchantments {
 
     public static void applyVeinMiner(
         List<BlockPos> visitedBlocks,
-        World world,
-        PlayerEntity player,
+        Level world,
+        Player player,
         ItemStack itemStack,
         BlockState mainState,
         BlockPos pos
@@ -47,7 +48,7 @@ public class Enchantments {
         List<BlockPos> blocks = Enchantments.getVeinShape(pos);
         for (BlockPos blockPos : blocks) {
             if (visitedBlocks.size() >= 128
-                || itemStack.getDamage() + visitedBlocks.size() == itemStack.getMaxDamage())
+                || itemStack.getDamageValue() + visitedBlocks.size() == itemStack.getMaxDamage())
                 break;
 
             if (visitedBlocks.contains(blockPos))
@@ -56,23 +57,23 @@ public class Enchantments {
             BlockState blockState = world.getBlockState(blockPos);
             Block block = blockState.getBlock();
             if (!block.equals(mainState.getBlock())
-                || !itemStack.isSuitableFor(blockState))
+                || !itemStack.isCorrectToolForDrops(blockState))
                 continue;
 
             visitedBlocks.add(blockPos);
 
-            block.afterBreak(world, player, blockPos, blockState, null, itemStack);
-            world.setBlockState(blockPos, Blocks.AIR.getDefaultState());
-            block.onBreak(world, blockPos, blockState, player);
+            block.playerDestroy(world, player, blockPos, blockState, null, itemStack);
+            world.setBlockAndUpdate(blockPos, Blocks.AIR.defaultBlockState());
+            block.playerWillDestroy(world, blockPos, blockState, player);
 
             applyVeinMiner(visitedBlocks, world, player, itemStack, mainState, blockPos);
         }
     }
 
-    public static boolean hasEnchantment(World world, ItemStack itemStack, RegistryKey<Enchantment> key) {
-        Registry<Enchantment> registry = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
-        RegistryEntry<Enchantment> enchantment = registry.getOrThrow(key);
+    public static boolean hasEnchantment(Level level, ItemStack itemStack, ResourceKey<Enchantment> key) {
+        Registry<Enchantment> registry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        Holder.Reference<Enchantment> enchantment = registry.getOrThrow(key);
 
-        return EnchantmentHelper.getLevel(enchantment, itemStack) > 0;
+        return itemStack.getEnchantments().getLevel(enchantment) > 0;
     }
 }
