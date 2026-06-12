@@ -35,7 +35,7 @@ public class Main implements ModInitializer {
                 ClientboundResourcePackPushPacket packet = new ClientboundResourcePackPushPacket(
                     packUUID,
                     "https://raw.githubusercontent.com/xKingDark/Kings-Vein-Miner/" + BuildInfo.COMMIT_HASH + "/src/main/resources/resourcepacks/kings-vein-miner.zip",
-                    packHash, true,
+                    packHash, false,
                     Optional.of(Component.literal("King's Vein Miner resources"))
                 );
 
