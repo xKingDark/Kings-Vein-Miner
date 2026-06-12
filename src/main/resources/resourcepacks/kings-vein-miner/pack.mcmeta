@@ -1,6 +1,7 @@
 {
     "pack": {
         "description": "Adds enchantments that allow you to break an entire vein of blocks!",
+        "supported_formats": [ 1, 101 ],
         "min_format": 1,
         "max_format": 2147483646
     }
